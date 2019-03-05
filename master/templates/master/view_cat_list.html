@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Category list</h3>
+<div>
+        {% for cat in cats %}
+            <ul>
+                <li>{{ cat.name }}</li>
+                <a href="{% url 'master:cat_edit' cat.id %}">Edit Category</a>
+            </ul>
+        {% endfor %}
+    </div>
+</body>
+</html>

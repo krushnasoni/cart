@@ -20,6 +20,7 @@ def sign_up_submit(request):
             obj = form.save(commit=False)
             obj.password = hashed_password
             obj.phone_number = "9835789000"
+            obj.user_type = "1"
             obj.save()
             return render(request, 'ecom/login.html')
         else:
@@ -37,12 +38,21 @@ def login_submit(request):
         user = Users.objects.get(email=request.POST['email'])
         print(user.password)
         if user.password == hashed_password :
-            request.session['userdata'] = user.username
-            return JsonResponse({'status':'1'})
+            userdata = {
+                "user_id" : user.id,
+                "username" : user.username,
+                "user_type" : user.user_type,
+            }
+            request.session['userdata'] = userdata
+            if user.user_type == '1':
+                user_type = '1'
+            else :
+                user_type = '2'
+            return JsonResponse({'status':'1','user_type':user_type})
         else:
             return JsonResponse({'status':'2'})
     except:
         return JsonResponse({'status':'2'})
 
 def welcome(request):
-    return render(request, 'ecom/welcome.html',{'session_data':request.session['userdata']})
+    return render(request, 'ecom/welcome.html',{'session_user':request.session['userdata']})

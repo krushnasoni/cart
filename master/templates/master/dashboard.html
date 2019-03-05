@@ -9,7 +9,8 @@
     <script src="{% static 'ecom/js/jquery.min.js' %}"></script>
 </head>
 <body>
+Welcome {{ session_user }}
 
-Welcome {{ session_user.username }}
+<a href="{% url 'master:cat_new' %}">Add Category</a>
 </body>
 </html>

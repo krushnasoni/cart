@@ -46,7 +46,11 @@
             $.post("{% url 'ecom:login_submit' %}",{email:$("#email").val(),password:$("#password").val(),csrfmiddlewaretoken: '{{ csrf_token }}'},function(response){
                     alert(response.status);
                     if(response.status == "1"){
-                         window.location.href = "{% url 'ecom:welcome' %}"
+                        if(response.user_type == "1"){
+                            window.location.href = "{% url 'master:dashboard' %}"
+                        }else{
+                            window.location.href = "{% url 'ecom:welcome' %}"
+                        }
                     }else{
                          alert("Please try again");
                     }
