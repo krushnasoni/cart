@@ -142,3 +142,6 @@ STATICFILES_FINDERS = (
 STATICFILES_DIRS = (
     ('ecom', os.path.join(BASE_DIR, 'ecom', 'assets')),
 )
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'gallary')

@@ -1,0 +1,29 @@
+{% extends "ecom/layouts/header.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <h3>Product list</h3>
+        {% for prod in products %}
+        <a href="{% url 'ecom:prod_details' prod.id %}">
+            <div>{{ prod.name }}</div>
+            <div>{{ prod.description }}</div>
+            <div>{{ prod.cat }}</div>
+            <div>{{ prod.price }}</div>
+        </a>
+        <br/>
+        {% endfor %}
+    </div>
+</div>
+</body>
+<script>
+    $(document).ready(function(){
+
+    });
+
+
+
+</script>
+</html>
+{% endblock %}

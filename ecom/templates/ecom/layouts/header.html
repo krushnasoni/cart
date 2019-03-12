@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Cart{% endblock %}</title>
+    {% load staticfiles %}
+    <link href="{% static 'ecom/css/bootstrap.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'ecom/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'ecom/js/jquery.min.js' %}"></script>
+    <style>
+    .palel-primary
+	{
+		border-color: #bce8f1;
+	}
+	.panel-primary>.panel-heading
+	{
+		background:#bce8f1;
+
+	}
+	.panel-primary>.panel-body
+	{
+		background-color: #EDEDED;
+	}
+
+    </style>
+</head>
+<body>
+{% block content %}
+{% endblock %}

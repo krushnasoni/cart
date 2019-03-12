@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "master/layouts/header.html" %}
+{% block title %} List Category {% endblock %}
+
+{% block content %}
 <h3>Category list</h3>
 <div>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
         {% for cat in cats %}
-            <ul>
-                <li>{{ cat.name }}</li>
-                <a href="{% url 'master:cat_edit' cat.id %}">Edit Category</a>
-            </ul>
+        <tr>
+            <td>{{ cat.name }}</td>
+            <td>
+                <a href="{% url 'master:cat_edit' cat.id %}">Edit</a> |
+                <a href="{% url 'master:cat_del' cat.id %}">Delete</a>
+            </td>
+        </tr>
         {% endfor %}
-    </div>
+    </table>
+</div>
 </body>
 </html>
+{% endblock %}

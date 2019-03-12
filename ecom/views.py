@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Users
+from master.models import Products
 from ecom.forms import SignUpForm
 import hashlib
 from django.http import JsonResponse
+import traceback
 
 def sign_up(request):
     return render(request, 'ecom/sign_up.html')
@@ -11,21 +13,23 @@ def sign_up(request):
 
 def sign_up_submit(request):
     # print(request.POST)
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            #form.save()
-            hashed_password = hashlib.sha512(request.POST['password'].encode('utf-8')).hexdigest()
+    try:
+        if request.method == 'POST':
+            form = SignUpForm(request.POST)
+            if form.is_valid():
+                #form.save()
+                hashed_password = hashlib.sha512(request.POST['password'].encode('utf-8')).hexdigest()
 
-            obj = form.save(commit=False)
-            obj.password = hashed_password
-            obj.phone_number = "9835789000"
-            obj.user_type = "1"
-            obj.save()
-            return render(request, 'ecom/login.html')
-        else:
-            return render(request, 'ecom/sign_up.html', {'form': form})
-    return render(request, 'ecom/sign_up.html')
+                obj = form.save(commit=False)
+                obj.password = hashed_password
+                obj.phone_number = "9835789000"
+                obj.save()
+                return render(request, 'ecom/login.html')
+            else:
+                return render(request, 'ecom/sign_up.html', {'form': form})
+        return render(request, 'ecom/sign_up.html')
+    except:
+        return HttpResponse("Something went wrong.")
 
 def login(request):
     return render(request, 'ecom/login.html')
@@ -56,3 +60,21 @@ def login_submit(request):
 
 def welcome(request):
     return render(request, 'ecom/welcome.html',{'session_user':request.session['userdata']})
+
+def home(request):
+    try:
+        product = Products.objects.all()
+        print(product)
+        return render(request,'ecom/home.html', {'products':product})
+    except Exception as e:
+        traceback.print_exc()
+        return HttpResponse("Something went wrong.")
+
+def prod_details(request,pk):
+    try:
+        product = get_object_or_404(Products, pk=pk)
+        print(product)
+        return render(request, 'ecom/prod_details.html', {'products':product})
+    except Exception as e:
+        traceback.print_exc()
+        return HttpResponse("Something went wrong.")

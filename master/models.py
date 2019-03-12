@@ -9,12 +9,18 @@ class Category(models.Model):
     admin = models.ForeignKey(Users, on_delete=models.CASCADE)
     created_date = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.name
+
 class Products(models.Model):
 
     name = models.CharField(max_length=200, null=False)
     description = models.TextField(null=False)
-    cat = models.ForeignKey(Category, on_delete=models.CASCADE)
+    cat = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
     image = models.TextField()
     price = models.FloatField(null=False)
     admin = models.ForeignKey(Users, on_delete=models.CASCADE)
     created_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name

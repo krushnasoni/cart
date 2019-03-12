@@ -1,0 +1,71 @@
+{% extends "master/layouts/header.html" %}
+{% block title %} Gallary {% endblock %}
+
+{% block content %}
+<h3>Gallary</h3>
+<div>
+
+    {% for val in image_list %}
+    <div>
+        <img src="{{ val }}" height="200px" width="200px">
+        <a href="#" id="{{ val }}" class="del_img" >Delete</a>
+    </div>
+    {% endfor %}
+
+</div>
+
+<br/>
+<form method="post" id="id_ajax_upload_form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="image">
+    <input name="prod_id" type="hidden" id="prod_id" value="{{ id }}">
+    <input type="submit"/>
+  </form>
+</body>
+<script type="text/javascript">
+    // form upload
+    $(document).ready(function(){
+    $(".del_img").click(function(response){
+        $.post("{% url 'master:delete_image' %}",{img:$(this).attr('id'),id:$("#prod_id").val(),csrfmiddlewaretoken: '{{ csrf_token }}'},function(response){
+              if(response.error){
+                    alert("Please try again");
+                    location.reload();
+               }else{
+                    location.reload();
+               }
+        });
+    });
+
+    $('#id_ajax_upload_form').submit(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: "{% url 'master:gallary_upload' %}",
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                //alert(response);
+                $('.error').remove();
+                console.log(response)
+                if(response.error){
+                    $.each(response.errors, function(name, error){
+                        error = '<small class="text-muted error">' + error + '</small>'
+                        $form.find('[name=' + name + ']').after(error);
+                    })
+                }
+                else{
+                    //alert(response.message)
+                    location.reload();
+                }
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+    });
+
+</script>
+</html>
+{% endblock %}
