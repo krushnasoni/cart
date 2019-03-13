@@ -2,25 +2,71 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+<style>
+    #container {
+    width: 100%;
+    max-width: 700px;
+    margin: 2em auto;
+}
+.cols {
+    -moz-column-count:3;
+    -moz-column-gap: 3%;
+    -moz-column-width: 30%;
+    -webkit-column-count:3;
+    -webkit-column-gap: 3%;
+    -webkit-column-width: 30%;
+    column-count: 3;
+    column-gap: 3%;
+    column-width: 30%;
+}
+.box {
+    margin-bottom: 20px;
+    height:100px;
+    background:#BFBFBF;
+}
+
+
+
+
+
+</style>
 <div class="wrapper fadeInDown">
-    <div id="formContent">
+    <div id="container" class="row product-list">
         <h3>Product list</h3>
-        {% for prod in products %}
-        <a href="{% url 'ecom:prod_details' prod.id %}">
-            <div>{{ prod.name }}</div>
-            <div>{{ prod.description }}</div>
-            <div>{{ prod.cat }}</div>
-            <div>{{ prod.price }}</div>
-        </a>
-        <br/>
-        {% endfor %}
+        <div class="row">
+            <!--write functions in template filter to access here in template as directly writing here is not possible.-->
+            {% load template_filters %}
+            {% for prod in products %}
+            <div class="col-md-4">
+                <a href="{% url 'ecom:prod_details' prod.id %}">
+                    <div class='col-xs-12'>
+                        <div class='panel panel-warning'>
+                            <div class='panel-heading'>{{ prod.name }}</div>
+                            <div class='panel-body'>
+                                <img class='product_listing_img img-responsive' src="{{ prod.image|get_first_image }}">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" id="{{ prod.id }}" class="add_cart btn btn-sm btn-success">Add to cart</a>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 </body>
 <script>
     $(document).ready(function(){
-
+         $(".add_cart").click(function(response){
+                alert($(this).attr('id'))
+         });
     });
+
+
+
+
+
+
 
 
 

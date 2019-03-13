@@ -12,9 +12,11 @@ from .prod_forms import ImageFileUploadForm
 from django.core.files.storage import FileSystemStorage
 from cartsite.decorators import login_required
 
+@login_required
 def dashboard(request):
     return render(request, 'master/dashboard.html',{'session_user':request.session['userdata']})
 
+@login_required
 def cat_list(request):
     try:
         cat = Category.objects.all()
@@ -45,6 +47,7 @@ def cat_new(request):
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
 
+@login_required
 def cat_edit(request, pk):
     try:
         person = get_object_or_404(Category, pk=pk)
@@ -62,6 +65,7 @@ def cat_edit(request, pk):
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
 
+@login_required
 def cat_del(request, pk):
     try:
         Category.objects.get(pk=pk).delete()
@@ -72,6 +76,7 @@ def cat_del(request, pk):
 
 #PRODUCT CRUD
 
+@login_required
 def prod_list(request):
     try:
         prod = Products.objects.all()
@@ -80,6 +85,7 @@ def prod_list(request):
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
 
+@login_required
 def prod_new(request):
     try:
         if request.method == 'POST':
@@ -101,6 +107,7 @@ def prod_new(request):
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
 
+@login_required
 def prod_edit(request, pk):
     try:
         person = get_object_or_404(Products, pk=pk)
@@ -118,6 +125,7 @@ def prod_edit(request, pk):
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
 
+@login_required
 def prod_del(request, pk):
     try:
         Products.objects.get(pk=pk).delete()
@@ -126,17 +134,22 @@ def prod_del(request, pk):
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
 
+@login_required
 def gallary(request, pk):
     try:
         product = get_object_or_404(Products, pk=pk)
         print(product.image)
-        import ast
-        new_list = ast.literal_eval(product.image)
+        if product.image == '' or product.image == 'None' :
+            new_list = ''
+        else :
+            import ast
+            new_list = ast.literal_eval(product.image)
         return render(request, 'master/gallary.html', {'id':pk ,'product':product,'image_list':new_list})
     except Exception as e:
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
 
+@login_required
 def gallary_upload(request):
     try:
         pk = request.POST['prod_id']
@@ -169,6 +182,7 @@ def gallary_upload(request):
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
 
+@login_required
 def delete_image(request) :
     pk = request.POST['id']
     img = request.POST['img']

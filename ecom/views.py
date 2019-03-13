@@ -6,10 +6,10 @@ from ecom.forms import SignUpForm
 import hashlib
 from django.http import JsonResponse
 import traceback
+from cartsite.decorators import login_required
 
 def sign_up(request):
     return render(request, 'ecom/sign_up.html')
-
 
 def sign_up_submit(request):
     # print(request.POST)
@@ -58,8 +58,14 @@ def login_submit(request):
     except:
         return JsonResponse({'status':'2'})
 
+@login_required
 def welcome(request):
     return render(request, 'ecom/welcome.html',{'session_user':request.session['userdata']})
+
+def logout(request):
+    from django.contrib.auth import logout
+    logout(request)
+    return render(request, 'ecom/login.html')
 
 def home(request):
     try:

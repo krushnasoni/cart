@@ -10,5 +10,6 @@ urlpatterns = [
     path('login_submit', views.login_submit, name='login_submit'),
     path('welcome', views.welcome, name='welcome'),
     path('home', views.home, name='home'),
+    path('logout', views.logout, name='logout'),
     path('prod_details/<int:pk>', views.prod_details, name='prod_details'),
 ]

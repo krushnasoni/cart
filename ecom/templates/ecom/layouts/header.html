@@ -22,8 +22,31 @@
 		background-color: #EDEDED;
 	}
 
+
     </style>
 </head>
 <body>
+<div class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-1">
+        <a href="{% url 'ecom:home' %}">Home</a>
+    </div>
+    {% if 'userdata' in request.session.keys %}
+        <div class="col-md-1">
+            <a href="{% url 'ecom:sign_up' %}">My account</a>
+        </div>
+        <div class="col-md-1">
+            <a href="{% url 'ecom:logout' %}">Logout</a>
+        </div>
+    {% else %}
+        <div class="col-md-1">
+            <a href="{% url 'ecom:login' %}">Login</a>
+        </div>
+        <div class="col-md-1">
+            <a href="{% url 'ecom:sign_up' %}">Sign up</a>
+        </div>
+    {% endif %}
+</div>
 {% block content %}
 {% endblock %}
