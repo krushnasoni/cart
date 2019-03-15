@@ -12,6 +12,7 @@ from cartsite.decorators import login_required
 def sign_up(request):
     return render(request, 'ecom/sign_up.html')
 
+
 def sign_up_submit(request):
     # print(request.POST)
     try:
