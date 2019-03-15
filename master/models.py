@@ -24,3 +24,10 @@ class Products(models.Model):
 
     def __str__(self):
         return self.name
+
+class Cart_user(models.Model):
+
+    prod = models.ForeignKey(Products, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(Users, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=1)
+    created_date = models.DateTimeField(default=timezone.now)

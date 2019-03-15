@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Users
 from master.models import Products
+from master.models import Cart_user
 from ecom.forms import SignUpForm
 import hashlib
 from django.http import JsonResponse
@@ -69,7 +70,7 @@ def logout(request):
 
 def home(request):
     try:
-        product = Products.objects.all()
+        product = Products.objects.select_related('cat').all()
         print(product)
         return render(request,'ecom/home.html', {'products':product})
     except Exception as e:
@@ -84,3 +85,13 @@ def prod_details(request,pk):
     except Exception as e:
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
+
+def add_to_cart(request):
+    prod_id = request.POST['prod_id']
+    if 'userdata' not in request.session.keys() :
+        return JsonResponse({'status':'1'})
+    else :
+        user_id = request.session['userdata']['user_id']
+        cart_user = Cart_user(user_id=user_id,prod_id=prod_id)
+        cart_user.save()
+        return JsonResponse({'status': '1', 'user_type': request.session['userdata']['user_id']})
