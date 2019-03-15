@@ -9,6 +9,9 @@ import traceback
 from cartsite.decorators import login_required
 
 def sign_up(request):
+    print("a")
+    print("b")
+    print("c")
     return render(request, 'ecom/sign_up.html')
 
 
