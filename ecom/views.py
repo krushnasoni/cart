@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Users
 from master.models import Products
+from master.models import Cart_user
 from ecom.forms import SignUpForm
 import hashlib
 from django.http import JsonResponse
@@ -12,6 +13,9 @@ def sign_up(request):
     print("a")
     print("b")
     print("c")
+    print("1")
+    print("2")
+    print("3")
     return render(request, 'ecom/sign_up.html')
 
 
@@ -73,7 +77,7 @@ def logout(request):
 
 def home(request):
     try:
-        product = Products.objects.all()
+        product = Products.objects.select_related('cat').all()
         print(product)
         return render(request,'ecom/home.html', {'products':product})
     except Exception as e:
