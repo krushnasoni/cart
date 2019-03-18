@@ -86,3 +86,53 @@ def prod_details(request,pk):
     except Exception as e:
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
+
+@login_required
+def add_to_cart(request):
+    prod_id = request.POST['prod_id']
+    print(request.session['userdata']['user_id'])
+    try:
+        user_id = request.session['userdata']['user_id']
+        try:
+            result = Cart_user.objects.get(user_id=user_id, prod_id=prod_id)
+            #print(result.quantity)
+            quantity = result.quantity + 1
+            result.quantity = quantity
+            result.save()
+            #print(result.quantity)
+            return HttpResponse("Quantity Added successfully.")
+        except:
+            cart = Cart_user()
+            cart.prod_id = prod_id
+            cart.user_id = user_id
+            cart.save()
+            return HttpResponse("Added successfully.")
+    except Exception as e:
+        traceback.print_exc()
+        return HttpResponse("Something went wrong.")
+
+@login_required
+def my_account(request):
+    return render(request, 'ecom/my_account.html')
+
+@login_required
+def my_cart(request):
+    try:
+        user_id = request.session['userdata']['user_id']
+        result = Cart_user.objects.filter(user_id=user_id).values('id','prod_id','quantity','user_id','prod__name','prod__price')
+        print(result)
+        return render(request, 'ecom/my_cart.html', {'products': result})
+    except Exception as e:
+        traceback.print_exc()
+        return HttpResponse("Something went wrong.")
+
+@login_required
+def remove_cart(request):
+    try:
+        cart_id = request.POST['cart_id']
+        Cart_user.objects.filter(id=cart_id).delete()
+        return HttpResponse("Product removed successfully.")
+    except Exception as e:
+        traceback.print_exc()
+        return HttpResponse("Something went wrong.")
+

@@ -1,0 +1,38 @@
+{% extends "ecom/layouts/header.html" %}
+{% block title %}My Account{% endblock %}
+
+{% block content %}
+<div class="col-md-6">
+    {% include "ecom/layouts/sidebar.html" %}
+</div>
+<div class="col-md-6">
+    <table>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Remove</th>
+        </tr>
+    {% for val in products %}
+    <tr>
+        <td>{{ val.prod__name }}</td>
+        <td>{{ val.prod__price }}</td>
+        <td>{{ val.quantity }}</td>
+        <td><a href="#" id="{{ val.id}}" class="remove_cart"> Remove X</a></td>
+    </tr>
+    {% endfor %}
+    </table>
+</div>
+</body>
+<script>
+    $(document).ready(function(){
+         $(".remove_cart").click(function(response){
+                $.post("{% url 'ecom:remove_cart' %}",{cart_id:$(this).attr('id'),csrfmiddlewaretoken: '{{ csrf_token }}'},function(response){
+                    alert(response);
+                    window.location.reload(true);
+                });
+         });
+    });
+</script>
+</html>
+{% endblock %}

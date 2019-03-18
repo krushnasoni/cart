@@ -60,18 +60,10 @@
          $(".add_cart").click(function(response){
                 $.post("{% url 'ecom:add_to_cart' %}",{prod_id:$(this).attr('id'),csrfmiddlewaretoken: '{{ csrf_token }}'},function(response){
                     alert(response);
+                    window.location.reload(true);
                 });
          });
     });
-
-
-
-
-
-
-
-
-
 </script>
 </html>
 {% endblock %}
