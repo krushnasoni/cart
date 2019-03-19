@@ -11,6 +11,7 @@ import traceback
 from .prod_forms import ImageFileUploadForm
 from django.core.files.storage import FileSystemStorage
 from cartsite.decorators import login_required
+from .models import Cart_user
 
 @login_required
 def dashboard(request):
@@ -195,3 +196,13 @@ def delete_image(request) :
         return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
     else:
         return JsonResponse({'error': True, 'message': 'Uploaded unsuccessful'})
+
+@login_required
+def cart_details(request):
+    try:
+        result = Cart_user.objects.extra(select={'total':'quantity * price'}).values('total','id','prod_id','quantity','user_id','prod__name','prod__price')
+        print(result)
+        return render(request, 'master/cart_details.html', {'form': result})
+    except Exception as e:
+        traceback.print_exc()
+        return HttpResponse("Something went wrong.")

@@ -16,4 +16,5 @@ urlpatterns = [
     path('gallary/<int:pk>', views.gallary, name='gallary'),
     path('gallary_upload', views.gallary_upload, name='gallary_upload'),
     path('delete_image', views.delete_image, name='delete_image'),
+    path('cart_details', views.cart_details, name='cart_details'),
 ]
