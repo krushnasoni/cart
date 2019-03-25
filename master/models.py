@@ -19,6 +19,7 @@ class Products(models.Model):
     cat = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
     image = models.TextField()
     price = models.FloatField(null=False)
+    stock = models.IntegerField(null=False,default=1)
     admin = models.ForeignKey(Users, on_delete=models.CASCADE)
     created_date = models.DateTimeField(default=timezone.now)
 
@@ -26,6 +27,13 @@ class Products(models.Model):
         return self.name
 
 class Cart_user(models.Model):
+
+    prod = models.ForeignKey(Products, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(Users, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=1)
+    created_date = models.DateTimeField(default=timezone.now)
+
+class Cart_user_logs(models.Model):
 
     prod = models.ForeignKey(Products, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(Users, on_delete=models.SET_NULL, null=True)

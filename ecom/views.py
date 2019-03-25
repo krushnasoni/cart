@@ -8,6 +8,7 @@ import hashlib
 from django.http import JsonResponse
 import traceback
 from cartsite.decorators import login_required
+from master.models import Cart_user_logs
 
 def sign_up(request):
     return render(request, 'ecom/sign_up.html')
@@ -93,20 +94,40 @@ def add_to_cart(request):
     print(request.session['userdata']['user_id'])
     try:
         user_id = request.session['userdata']['user_id']
-        try:
-            result = Cart_user.objects.get(user_id=user_id, prod_id=prod_id)
-            #print(result.quantity)
-            quantity = result.quantity + 1
-            result.quantity = quantity
-            result.save()
-            #print(result.quantity)
-            return HttpResponse("Quantity Added successfully.")
-        except:
-            cart = Cart_user()
-            cart.prod_id = prod_id
-            cart.user_id = user_id
-            cart.save()
-            return HttpResponse("Added successfully.")
+
+        #for transaction code
+        from django.db import transaction
+        with transaction.atomic():
+            prod_result = Products.objects.get(id=prod_id)
+            cart_logs = Cart_user_logs()
+            cart_logs.prod_id = prod_id
+            cart_logs.user_id = user_id
+            cart_logs.save()
+        #for transaction code
+
+            if prod_result.stock > 0:
+                try:
+                    result = Cart_user.objects.get(user_id=user_id, prod_id=prod_id)
+                    #print(result.quantity)
+                    quantity = result.quantity + 1
+                    result.quantity = quantity
+                    result.save()
+                    #print(result.quantity)
+
+                    prod_result.stock = prod_result.stock - 1
+                    prod_result.save()
+                    return HttpResponse("Quantity Added successfully.")
+                except:
+                    cart = Cart_user()
+                    cart.prod_id = prod_id
+                    cart.user_id = user_id
+                    cart.save()
+
+                    prod_result.stock = prod_result.stock - 1
+                    prod_result.save()
+                    return HttpResponse("Added successfully.")
+            else:
+                raise Exception("Not in stock")
     except Exception as e:
         traceback.print_exc()
         return HttpResponse("Something went wrong.")
