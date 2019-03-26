@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from ecom.serializers import views as views1
 
 app_name = 'ecom'
 
@@ -16,4 +17,5 @@ urlpatterns = [
     path('my_account', views.my_account, name='my_account'),
     path('my_cart', views.my_cart, name='my_cart'),
     path('remove_cart', views.remove_cart, name='remove_cart'),
+    path('user_list', views1.user_list)
 ]

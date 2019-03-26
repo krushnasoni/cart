@@ -31,3 +31,5 @@ if settings.DEBUG:
 
 urlpatterns += [url(r'^silk/', include('silk.urls', namespace='silk'))]
 
+url(r'^api-auth/', include('rest_framework.urls'))
+
